@@ -1,11 +1,14 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+
 import Notiflix from 'notiflix';
+
 const btnEl = document.querySelector('button[data-start]');
 const hoursEl = document.querySelector('span[data-hours]');
 const daysEl = document.querySelector('span[data-days]');
 const minutesEl = document.querySelector('span[data-minutes]');
 const secondsEl = document.querySelector('span[data-seconds]');
+
 const datetimePicker = flatpickr("#datetime-picker", {
     enableTime: true,
     time_24hr: true,
@@ -22,7 +25,9 @@ const datetimePicker = flatpickr("#datetime-picker", {
       };   
     },
 });
+
 let timerId;
+
 function convertMs(ms) {
     const second = 1000;
     const minute = second * 60;
@@ -34,7 +39,9 @@ function convertMs(ms) {
     let seconds = Math.floor((((ms % day) % hour) % minute) / second);
     return { days, hours, minutes, seconds };
 };
+
 function updateDateTime() {
+
     const selectedDate = datetimePicker.selectedDates[0].getTime();
     const currentDate = new Date().getTime();
     const difference = selectedDate - currentDate;
@@ -43,6 +50,7 @@ function updateDateTime() {
     hoursEl.textContent = addLeadingZero(hours);
     minutesEl.textContent = addLeadingZero(minutes);
     secondsEl.textContent = addLeadingZero(seconds);
+
     if(difference <= 0) {
         clearInterval(timerId);
         daysEl.textContent = '00';
@@ -53,10 +61,13 @@ function updateDateTime() {
     }
 };
 function addLeadingZero(value) {
+
     return value.toString().padStart(2, '0');
 };
+
 function onBtnClick() {
     updateDateTime();
     timerId = setInterval(() => updateDateTime(), 1000);
 };
+
 btnEl.addEventListener('click', onBtnClick);
